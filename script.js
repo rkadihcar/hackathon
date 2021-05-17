@@ -18,7 +18,7 @@ let rightPressed = false;
 let leftPressed = false;
 
 let brickRowCount = 5; //nombre de brique en ligne
-let brickColumnCount = 3;//nombre de brique en column
+let brickColumnCount = 3; //nombre de brique en column
 // hauteur, largeur et espacement entre les briques
 let brickWidth = 75;
 let brickHeight = 20;
@@ -49,8 +49,7 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 function keyDownHandler(event) {
     if (event.key == "Right" || event.key == "ArrowRight") {
         rightPressed = true;
-    }
-    else if (event.key == "Left" || event.key == "ArrowLeft") {
+    } else if (event.key == "Left" || event.key == "ArrowLeft") {
         leftPressed = true;
     }
 }
@@ -58,8 +57,7 @@ function keyDownHandler(event) {
 function keyUpHandler(event) {
     if (event.key == "Right" || event.key == "ArrowRight") {
         rightPressed = false;
-    }
-    else if (event.key == "Left" || event.key == "ArrowLeft") {
+    } else if (event.key == "Left" || event.key == "ArrowLeft") {
         leftPressed = false;
     }
 }
@@ -91,8 +89,8 @@ function collisionDetection() {
                     score++;
                     // si le score = nombre total de briques alors "you win"
                     if (score == brickRowCount * brickColumnCount) {
-                        alert("YOU WIN, CONGRATS!");
-                        document.location.reload();//Recharger la page
+                        alert("YOU WIN!");
+                        document.location.reload(); //Recharger la page
                     }
                 }
             }
@@ -102,16 +100,17 @@ function collisionDetection() {
 //définition param de la balle et du Paddle
 
 function drawBall() {
-    ctx.beginPath();//point de départ de la trajectoire 
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);//dessin de la courbe
-    ctx.fillStyle = "#0095DD";//la couleur de la balle
-    ctx.fill();//
+    ctx.beginPath(); //point de départ de la trajectoire 
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2); //dessin de la courbe
+    ctx.fillStyle = "red"; //la couleur de la balle
+    ctx.fill(); //
     ctx.closePath();
 }
+
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#fc9838";
     ctx.fill();
     ctx.closePath();
 }
@@ -127,7 +126,7 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                ctx.fillStyle = "#cf510c";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -136,19 +135,19 @@ function drawBricks() {
 }
 //affichage du score et style
 function drawScore() {
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
-    ctx.fillText("Score: " + score, 8, 20);//les coordonnées du score par rapport au canvas
+    ctx.font = "18px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Score: " + score, 8, 20); //les coordonnées du score par rapport au canvas
 }
 //affichage du live et style
 function drawLives() {
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.font = "18px Arial";
+    ctx.fillStyle = "black";
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
 //rappel de toutes les functions
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);//initialisation du canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height); //initialisation du canvas
     drawBricks();
     drawBall();
     drawPaddle();
@@ -156,25 +155,22 @@ function draw() {
     drawLives();
     collisionDetection();
 
-//on vérifie que la taille de la balle ne dépasse pas la taille du paddle + les trajectoires de la balle ne dépassent pas l'espace canvas
-//
+    //on vérifie que la taille de la balle ne dépasse pas la taille du paddle + les trajectoires de la balle ne dépassent pas l'espace canvas
+    //
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
     }
     if (y + dy < ballRadius) {
         dy = -dy;
-    }
-    else if (y + dy > canvas.height - ballRadius) {
+    } else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
-        }
-        else {
+        } else {
             lives--;
             if (!lives) { //si 0 vie 
                 alert("GAME OVER");
                 document.location.reload();
-            }
-            else {//initialisation du canvas
+            } else { //initialisation du canvas
                 x = canvas.width / 2;
                 y = canvas.height - 30;
                 dx = 2;
@@ -183,14 +179,13 @@ function draw() {
             }
         }
     }
-// si la touche droite est enfoncée et le paddle est < à la largeur du canvas-la largeur du paddle
+    // si la touche droite est enfoncée et le paddle est < à la largeur du canvas-la largeur du paddle
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 6;//pn peut déplacer le paddle à droite de 6 px
-    }
-    else if (leftPressed && paddleX > 0) {
+        paddleX += 6; //pn peut déplacer le paddle à droite de 6 px
+    } else if (leftPressed && paddleX > 0) {
         paddleX -= 6;
     }
-//permet de mettre la balle en mouvement
+    //permet de mettre la balle en mouvement
     x += dx;
     y += dy;
     requestAnimationFrame(draw); //signaler au navigateur qu'on utilise une animation
